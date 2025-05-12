@@ -33,7 +33,7 @@ const ProductPage = () => {
                 <Card.Title className="card-title" >Camiseta {productName} {productYear}</Card.Title>
                 <Card.Body>
                     <p>{productCountry}</p>
-                    <Row><p>{productDescription}</p>
+                    <Row><p>{!productDescription ? "no hay descripcion de este producto" : productDescription}</p>
                         <Col md={7}>
                             <p className="price">$ {parseFloat(productPrice).toFixed(2)}</p>
                         </Col>
