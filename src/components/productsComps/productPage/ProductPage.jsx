@@ -33,8 +33,8 @@ const ProductPage = () => {
                     className="shadow-lg"
                     style={{
                         maxWidth: "1000px",
-                        marginTop:"50px",
-                        marginBottom:"20px",
+                        marginTop: "50px",
+                        marginBottom: "20px",
                         width: "100%",
                         backgroundColor: "#f9f9f9",
                     }}
@@ -55,7 +55,7 @@ const ProductPage = () => {
                                     border: "1px solid #ccc",
                                     borderRadius: "8px",
                                     width: "100%",
-                                    height:"auto",
+                                    height: "auto",
                                 }}
                             />
                         </Col>
@@ -93,6 +93,7 @@ const ProductPage = () => {
                                 <div className="d-flex justify-content-end mt-4">
                                     <Button
                                         variant="success"
+                                        disabled={productStock === 0}
                                         onClick={() =>
                                             addToCart({
                                                 productId,
@@ -106,9 +107,8 @@ const ProductPage = () => {
                                             })
                                         }
                                     >
-                                        Agregar al carrito
+                                        {productStock === 0 ? "Sin stock" : "Agregar al carrito"}
                                     </Button>
-
                                 </div>
                             </Card.Body>
                         </Col>

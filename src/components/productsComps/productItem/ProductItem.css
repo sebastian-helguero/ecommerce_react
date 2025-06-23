@@ -42,3 +42,7 @@
 .edit-product{
     margin-left: 40px;
 }
+
+.out-of-stock {
+    opacity: 0.5;
+}

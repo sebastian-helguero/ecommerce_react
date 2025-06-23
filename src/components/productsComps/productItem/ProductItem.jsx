@@ -17,7 +17,6 @@ const ProductItem = ({
     onProductSelected }) => {
 
     const navigate = useNavigate();
-
     const { userRole } = useContext(AuthContext);
 
     const handleProductPage = () => {
@@ -36,8 +35,8 @@ const ProductItem = ({
                     productState
                 }
             }
-        })
-    }
+        });
+    };
 
     const handleEditProduct = () => {
         navigate(`/edit-product/${productId}`, {
@@ -55,43 +54,52 @@ const ProductItem = ({
                 }
             }
         });
-    }
+    };
 
     return (
         <>
-            {productState ? <Card className="mx-4 product card-container">
-                <div key={productId}>
-                    <div>
-                        <Card.Img style={{ borderwidth: "2px", bordercolor: "gray" }}
-                            height={250}
-                            variant="top"
-                            src={productImage}
-                            alt={productName} />
-                        <Card.Body className="product card-body">
-                            <Card.Title className="product card-title">{productName} {productYear}</Card.Title>
-                            <p className="product price">$
-                                {parseFloat(productPrice).toFixed(2)}
-                            </p>
-                            <Button
-                                className="product btn btn-primary mt-auto"
-                                variant="primary"
-                                onClick={handleProductPage}>
-                                Comprar
-                            </Button>
-                            {(userRole === "admin" || userRole === "sysadmin") && (
+            {productState ? (
+                <Card className={`mx-4 product card-container ${productStock === 0 ? "out-of-stock" : ""}`}>
+                    <div key={productId}>
+                        <div>
+                            <Card.Img
+                                style={{ borderWidth: "2px", borderColor: "gray" }}
+                                height={250}
+                                variant="top"
+                                src={productImage}
+                                alt={productName}
+                            />
+                            <Card.Body className="product card-body">
+                                <Card.Title className="product card-title">
+                                    {productName} {productYear}
+                                </Card.Title>
+                                {productStock === 0 ? <p style={{fontSize:"25px"}}>sin stock</p> :
+                                    <p className="product price">
+                                        ${parseFloat(productPrice).toFixed(2)}
+                                    </p>}
                                 <Button
-                                    className="edit-product btn btn-secondary mt-auto"
-                                    variant="secondary"
-                                    onClick={handleEditProduct}>
-                                    Editar Producto
+                                    className="product btn btn-primary mt-auto"
+                                    variant="primary"
+                                    onClick={handleProductPage}
+                                >
+                                    Comprar
                                 </Button>
-                            )}
-                        </Card.Body>
+                                {(userRole === "admin" || userRole === "sysadmin") && (
+                                    <Button
+                                        className="edit-product btn btn-secondary mt-auto"
+                                        variant="secondary"
+                                        onClick={handleEditProduct}
+                                    >
+                                        Editar Producto
+                                    </Button>
+                                )}
+                            </Card.Body>
+                        </div>
                     </div>
-                </div>
-            </Card> : null}
+                </Card>
+            ) : null}
         </>
-    )
-}
+    );
+};
 
-export default ProductItem
+export default ProductItem;
