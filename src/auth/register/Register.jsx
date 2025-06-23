@@ -5,7 +5,6 @@ import { validateEmail, validatePassword, validateString, validateUserAge } from
 import { errorToast, successToast } from "../../utils/notification";
 import { registerUser } from "./Register.services";
 
-
 const Register = () => {
     const [fullName, setFullName] = useState("");
     const [birthDate, setBirthDate] = useState("");
@@ -55,6 +54,7 @@ const Register = () => {
     }
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
+        
     }
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
@@ -140,6 +140,7 @@ const Register = () => {
             userPassword,
             () => {
                 successToast("¡Usuario creado exitosamente!")
+                navigate("/login");
             },
             err => errorToast(err.message)
         )

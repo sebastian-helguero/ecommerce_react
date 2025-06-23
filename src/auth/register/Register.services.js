@@ -22,7 +22,6 @@ export const registerUser = (
                 const errData = await res.json().catch(() => ({}));
                 throw new Error(errData.message || "Algo ha salido mal");
             }
-
              return res.json();
         })
         .then(onSuccess)

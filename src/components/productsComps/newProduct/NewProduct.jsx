@@ -1,58 +1,136 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
 import { errorToast, successToast } from "../../../utils/notification";
 
-
 import "./NewProduct.css";
+import { createNewProduct } from "./NewProduct.services";
+import { validateString } from "../../../auth/auth.helpers";
+import { AuthContext } from "../../../services/authContext/Auth.context";
 
 const NewProduct = () => {
     const [productName, setProductName] = useState("");
     const [productYear, setProductYear] = useState("");
     const [productDescription, setProductDescription] = useState("");
-    const [productPrice, setProductPrice] = useState(0);
+    const [productPrice, setProductPrice] = useState("");
     const [productCountry, setProductCountry] = useState("");
     const [productStock, setProductStock] = useState(0);
     const [productImage, setProductImage] = useState("");
+    const productState = true;
+
+    const { token } = useContext(AuthContext)
+    const [errors, setErrors] = useState({
+        productName: false,
+        productYear: false,
+        productPrice: false,
+        productCountry: false,
+        productStock: false,
+        productImage: false,
+    });
 
     const navigate = useNavigate();
     const handleGoBack = () => {
         navigate("/products");
     }
 
-
-    const handleChangeProductName = (event) => {
+    const handleNewProductName = (event) => {
         setProductName(event.target.value);
     }
-    const handleChangeProductYear = (event) => {
+    const handleNewProductYear = (event) => {
         setProductYear(event.target.value);
     }
-    const handleChangeProductDescription = (event) => {
+    const handleNewProductDescription = (event) => {
         setProductDescription(event.target.value);
     }
-    const handleChangeProductPrice = (event) => {
-        setProductPrice(parseFloat(event.target.value));
+    const handleNewProductPrice = (event) => {
+        const value = event.target.value;
+        if (value === "") {
+            setProductPrice("");
+        } else {
+            const parsed = parseFloat(value);
+            if (!isNaN(parsed)) {
+                setProductPrice(parsed);
+            }
+        }
     }
-    const handleChangeProductCountry = (event) => {
+    const handleNewProductCountry = (event) => {
         setProductCountry(event.target.value);
     }
-    const handleChangeProductStock = (event) => {
+    const handleNewProductStock = (event) => {
         setProductStock(parseInt(event.target.value));
     }
-    const handleChangeProductImage = (event) => {
+    const handleNewProductImage = (event) => {
         setProductImage(event.target.value);
     }
 
     const HandleAddProduct = (event) => {
         event.preventDefault();
-        if (!productName || !productYear || !productPrice || !productCountry || !productStock || !productImage) {
-            return errorToast("El nombre, año, imagen, país, precio y stock son campos requeridos", {
+        if (!productName.length || !validateString(productName, 2, 50)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productName: true
+            }));
+            return errorToast("El nombre es un campo obligatorio", {
                 theme: 'dark'
             });
         }
-        const productData = {
+        if (!productYear.length || !validateString(productYear, 4, 4)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productYear: true
+            }));
+            return errorToast("El año es un campo obligatorio y debe tener 4 dígitos", {
+                theme: 'dark'
+            });
+        }
+        if (!productPrice || productPrice <= 0) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productPrice: true
+            }));
+            return errorToast("El precio es un campo obligatorio y debe ser mayor a 0", {
+                theme: 'dark'
+            });
+        }
+        if (!productCountry.length || !validateString(productCountry, 2, 50)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productCountry: true
+            }));
+            return errorToast("Debe seleccionar un país", {
+                theme: 'dark'
+            });
+        }
+        if (!productStock || productStock <= 0) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productStock: true
+            }));
+            return errorToast("El stock es un campo obligatorio y debe ser mayor a 0", {
+                theme: 'dark'
+            });
+        }
+        else if (!productImage.length || !validateString(productImage, 5, false)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                productImage: true
+            }));
+            return errorToast("La imagen es un campo obligatorio", {
+                theme: 'dark'
+            });
+        }
+        setErrors({
+            productName: false,
+            productYear: false,
+            productPrice: false,
+            productCountry: false,
+            productStock: false,
+            productImage: false,
+        });
+
+        createNewProduct(
             productName,
             productYear,
             productDescription,
@@ -60,8 +138,9 @@ const NewProduct = () => {
             productCountry,
             productStock,
             productImage,
-            productState: true
-        }
+            productState,
+            token
+        )
         setProductName("")
         setProductYear("")
         setProductDescription("")
@@ -69,7 +148,6 @@ const NewProduct = () => {
         setProductCountry("")
         setProductStock(0)
         setProductImage("");
-        console.log({ productData });
         successToast("Producto agregado correctamente", {
             theme: 'dark'
         });
@@ -94,7 +172,7 @@ const NewProduct = () => {
                                         type="text"
                                         value={productName}
                                         placeholder="Ingresar nombre del producto"
-                                        onChange={handleChangeProductName} />
+                                        onChange={handleNewProductName} />
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -102,9 +180,11 @@ const NewProduct = () => {
                                     <Form.Label>Año</Form.Label>
                                     <Form.Control
                                         type="number"
+                                        min={1900}
+                                        max={new Date().getFullYear()}
                                         value={productYear}
                                         placeholder="Ingresar año"
-                                        onChange={handleChangeProductYear} />
+                                        onChange={handleNewProductYear} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -115,7 +195,7 @@ const NewProduct = () => {
                                     type="text"
                                     value={productImage}
                                     placeholder="Ingresar url de imagen"
-                                    onChange={handleChangeProductImage} />
+                                    onChange={handleNewProductImage} />
                             </Form.Group>
                         </Row>
                         <Row>
@@ -126,7 +206,7 @@ const NewProduct = () => {
                                         placeholder="Seleccionar país"
                                         as="select"
                                         defaultValue=""
-                                        onChange={handleChangeProductCountry}>
+                                        onChange={handleNewProductCountry}>
                                         <option value="" disabled>Seleccionar país</option>
                                         <option>Alemania</option>
                                         <option>España</option>
@@ -141,10 +221,11 @@ const NewProduct = () => {
                                     <Form.Label>Precio</Form.Label>
                                     <Form.Control
                                         type="number"
+                                        step="0.01"
                                         value={productPrice}
                                         placeholder="Ingresar Precio"
-                                        min={1}
-                                        onChange={handleChangeProductPrice}
+                                        min={19.99}
+                                        onChange={handleNewProductPrice}
                                     />
                                 </Form.Group>
                             </Col>
@@ -156,7 +237,7 @@ const NewProduct = () => {
                                         value={productStock}
                                         placeholder="Ingresar Stock"
                                         min={1}
-                                        onChange={handleChangeProductStock}
+                                        onChange={handleNewProductStock}
                                     />
                                 </Form.Group>
                             </Col>
@@ -171,16 +252,15 @@ const NewProduct = () => {
                                         as={"textarea"}
                                         rows={5}
                                         placeholder="Ingresar descrpción"
-                                        onChange={handleChangeProductDescription} />
+                                        onChange={handleNewProductDescription} />
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Row className="justify-content-end">
-                            <Col md={3} className="d-flex flex-column justify-content-end align-items-end">
+                            <Col md={4} className="d-flex flex-column justify-content-end align-items-end">
                                 <Button variant="success" type="submit">
                                     Agregar producto
                                 </Button>
-
                             </Col>
                         </Row>
                     </Form>
@@ -189,6 +269,5 @@ const NewProduct = () => {
         </>
     );
 };
-
 
 export default NewProduct;

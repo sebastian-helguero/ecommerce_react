@@ -1,31 +1,35 @@
-import { useEffect, useState } from 'react';
-import ProductItem from '../productItem/ProductItem'
-import ProductSearch from '../productSearch/ProductSearch';
+import { useContext, useEffect, useState } from 'react'
+import { getProducts } from '../products/GetProducts.services';
+import ProductList from '../productList/ProductList';
 import NavBar from '../../navBar/NavBar';
-import { getProducts } from './GetProducts.services';
-import ModalDelete from '../../../ui/ModalDelete';
+import ProductSearch from '../productSearch/ProductSearch';
+import { recoverProductService } from './RecoverProduct.services';
+import { errorToast, successToast } from '../../../utils/notification';
+import { AuthContext } from '../../../services/authContext/Auth.context';
 
-const initialModalState = {
-    show: false,
-    id: 0,
-    title: ''
-};
-
-const Products = ({onDelete}) => {
-    const [selectedProduct, setSelectedProduct] = useState("");
+const RecoverProduct = () => {
+    const [prodList, setProdList] = useState([])
     const [searchProduct, setSearchProduct] = useState("");
     const [selectedProductCountries, setSelectedProductCountries] = useState([]);
-    const [prodList, setProdList] = useState([]);
-    const [modal, setModal] = useState(initialModalState);
 
-    const handleProductSelected = (productId) => {
-        setSelectedProduct(productId);
-    }
+    const { token } = useContext(AuthContext)
+
     const handleProductSearch = (value) => {
         setSearchProduct(value)
     }
     const handleSelectedProductCountry = (productCountry) => {
         setSelectedProductCountries(productCountry)
+    }
+
+    const productRecover = async (productId) => {
+        try {
+            await recoverProductService(productId, token)
+            successToast("¡Producto recuperado exitosamente!");
+            const updated = await getProducts();
+            setProdList(updated);
+        } catch (err) {
+            errorToast(err.message || "Error al recuperar el producto")
+        }
     }
 
     const productList = useEffect(() => {
@@ -39,12 +43,11 @@ const Products = ({onDelete}) => {
     const ProductMapped = prodList
         .filter
         (product =>
-            product.productState === true && 
+            product.productState === false &&
             product.productName?.toUpperCase().includes(searchProduct.toUpperCase())
             && (selectedProductCountries.length === 0 || selectedProductCountries.includes(product.productCountry)))
-
         .map((product) =>
-            <ProductItem
+            <ProductList
                 key={product.productId}
                 productId={product.productId}
                 productName={product.productName}
@@ -55,15 +58,13 @@ const Products = ({onDelete}) => {
                 productCountry={product.productCountry}
                 productStock={product.productStock}
                 productState={product.productState}
-                onProductSelected={handleProductSelected}
-                
-            />)
+                onRecover={productRecover} />)
     return (
         <>
             <NavBar />
             <div className="d-flex align-items-flex-start" style={{ width: "100%" }}>
                 <ProductSearch onSearch={handleProductSearch} searchProduct={searchProduct} onCountryFilter={setSelectedProductCountries} products={prodList} />
-                <div className="d-flex flex-wrap" style={{ width: "100%", marginTop: "90px" }}>
+                <div className="d-flex flex-wrap" style={{ width: "100%", marginTop: "60px", marginLeft: "20px" }}>
                     {ProductMapped.length ? ProductMapped :
                         <p style={
                             {
@@ -82,4 +83,4 @@ const Products = ({onDelete}) => {
     )
 }
 
-export default Products
+export default RecoverProduct

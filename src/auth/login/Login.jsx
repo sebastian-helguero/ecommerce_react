@@ -5,8 +5,6 @@ import { AuthContext } from "../../services/authContext/Auth.context";
 import { errorToast } from "../../utils/notification";
 import { loginUser } from "./Login.services";
 
-
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -61,8 +59,8 @@ const Login = () => {
     }
 
     loginUser({ email, userPassword },
-      (token) => {
-        handleUserLogin(token);
+      (data) => {
+        handleUserLogin(data.token, data.userRole);
         navigate("/products");
       },
       (error) => {
@@ -84,7 +82,7 @@ const Login = () => {
             <Form.Group className="mb-3" >
               <Form.Label>Email</Form.Label>
               <Form.Control
-                type="text"
+                type="email"
                 className={
                   `input-email  ${errors.email ? 'border border-danger' : ''}`
                 }
@@ -105,15 +103,12 @@ const Login = () => {
                 ref={passwordRef}
               />
             </Form.Group>
-
             <Button variant="primary" type="submit">
               Ingresar
             </Button>
             <Row className="mt-4">
-
               <Button onClick={handleRegisterClick}>Registrarse</Button>
             </Row>
-
           </Form>
         </Card.Body>
       </Card>

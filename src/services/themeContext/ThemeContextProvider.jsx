@@ -3,11 +3,11 @@ import { useEffect, useState } from "react"
 import { THEMES } from "./ThemeContextProvider.consts";
 import { ThemeContext } from "./Theme.context";
 
-const themeSaved = localStorage.getItem("theme");
+const themeSaved = localStorage.getItem("theme") || THEMES.LIGHT;
 
 const ThemeContextProvider = ({ children }) => {
     const [theme, setTheme] = useState(themeSaved);
-
+    
     useEffect(() => {
         document.documentElement.setAttribute("data-bs-theme", theme)
     }, [theme])
