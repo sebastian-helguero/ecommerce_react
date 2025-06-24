@@ -6,7 +6,6 @@ import AuthContextProvider from './services/authContext/AuthContextProvider.jsx'
 import ThemeContextProvider from './services/themeContext/ThemeContextProvider.jsx'
 import CartContextProvider from './services/cartContext/CartContextProvider.jsx'
 
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeContextProvider>

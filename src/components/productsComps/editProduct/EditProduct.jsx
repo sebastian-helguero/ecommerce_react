@@ -18,6 +18,7 @@ const EditProduct = ({ }) => {
     const navigate = useNavigate();
 
     const location = useLocation();
+
     const { token } = useContext(AuthContext);
 
     const {
@@ -37,6 +38,7 @@ const EditProduct = ({ }) => {
     const [newProductStock, setNewProductStock] = useState(productStock);
     const [newProductImage, setNewProductImage] = useState(productImage);
     const [modal, setModal] = useState(initialModalState);
+
     const { id: productId } = useParams();
 
     const handleEditProductName = (event) => {
@@ -68,6 +70,7 @@ const EditProduct = ({ }) => {
     const handleEditProductImage = (event) => {
         setNewProductImage(event.target.value);
     }
+
     const handleEditProduct = async (event) => {
         event.preventDefault();
         const productState = true;
@@ -116,9 +119,11 @@ const EditProduct = ({ }) => {
             title: productName
         });
     }
+
     const handleHideDeleteModal = () => {
         setModal(initialModalState);
     }
+
     const handleDeleteProduct = async () => {
         try {
             await deleteProductService(productId, token)
@@ -133,6 +138,7 @@ const EditProduct = ({ }) => {
     const handleBackToProducts = () => {
         navigate("/products");
     }
+    
     return (
         <>
             <ModalDelete

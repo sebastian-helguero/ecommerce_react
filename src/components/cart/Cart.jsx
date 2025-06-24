@@ -15,6 +15,7 @@ const Cart = () => {
   const handleCreateOrder = () => {
     navigate("/create-order")
   }
+  
   const ProductsOnCart = cartItems
     .map((item) =>
       <ProductList

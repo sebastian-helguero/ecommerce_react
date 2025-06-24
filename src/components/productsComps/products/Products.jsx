@@ -3,20 +3,13 @@ import ProductItem from '../productItem/ProductItem'
 import ProductSearch from '../productSearch/ProductSearch';
 import NavBar from '../../navBar/NavBar';
 import { getProducts } from './GetProducts.services';
-import ModalDelete from '../../../ui/ModalDelete';
 
-const initialModalState = {
-    show: false,
-    id: 0,
-    title: ''
-};
-
-const Products = ({onDelete}) => {
+const Products = () => {
     const [selectedProduct, setSelectedProduct] = useState("");
     const [searchProduct, setSearchProduct] = useState("");
     const [selectedProductCountries, setSelectedProductCountries] = useState([]);
     const [prodList, setProdList] = useState([]);
-    const [modal, setModal] = useState(initialModalState);
+    
 
     const handleProductSelected = (productId) => {
         setSelectedProduct(productId);

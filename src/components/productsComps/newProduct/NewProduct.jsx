@@ -18,9 +18,11 @@ const NewProduct = () => {
     const [productCountry, setProductCountry] = useState("");
     const [productStock, setProductStock] = useState(0);
     const [productImage, setProductImage] = useState("");
+
     const productState = true;
 
     const { token } = useContext(AuthContext)
+
     const [errors, setErrors] = useState({
         productName: false,
         productYear: false,
@@ -31,6 +33,7 @@ const NewProduct = () => {
     });
 
     const navigate = useNavigate();
+    
     const handleGoBack = () => {
         navigate("/products");
     }

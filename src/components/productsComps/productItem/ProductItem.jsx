@@ -17,6 +17,7 @@ const ProductItem = ({
     onProductSelected }) => {
 
     const navigate = useNavigate();
+    
     const { userRole } = useContext(AuthContext);
 
     const handleProductPage = () => {

@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 const Protected = () => {
     const { token } = useContext(AuthContext);
+
     if (!token) {
         return <Navigate to='/login' replace />
     }

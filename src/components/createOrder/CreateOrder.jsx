@@ -5,7 +5,7 @@ import { createOrder } from "./CreateOrder.services";
 import { Button, Card, Form } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { errorToast, successToast } from "../../utils/notification";
-
+import UseDiscount from "../../hooks/useDiscount/UseDiscount";
 
 const CreateOrder = () => {
     const { cartItems, clearCart } = useContext(CartContext);
@@ -18,6 +18,8 @@ const CreateOrder = () => {
         0
     );
 
+    const { finalPrice, discountRate, hasDiscount } = UseDiscount(totalPrice, paymentMethod);
+
     const handleCreateOrder = async () => {
         const products = cartItems.map((item) => ({
             productId: item.productId,
@@ -25,7 +27,7 @@ const CreateOrder = () => {
             orderSubtotalPrice: item.productPrice * item.quantity,
         }));
         try {
-            await createOrder(products, paymentMethod, totalPrice, token);
+            await createOrder(products, paymentMethod, finalPrice, token);
             successToast("Pedido realizado con éxito");
             clearCart();
             navigate("/products");
@@ -48,7 +50,16 @@ const CreateOrder = () => {
                     <div>
                         <Form.Check
                             type="radio"
-                            label="Transferencia bancaria"
+                            label={
+                                paymentMethod === "bank transfer" ? (
+                                    <>
+                                        Transferencia bancaria{" "}
+                                        <span className="text-success fw-semibold">(10% de descuento)</span>
+                                    </>
+                                ) : (
+                                    "Transferencia bancaria"
+                                )
+                            }
                             value="bank transfer"
                             checked={paymentMethod === "bank transfer"}
                             onChange={(e) => setPaymentMethod(e.target.value)}
@@ -80,7 +91,16 @@ const CreateOrder = () => {
                     ))}
                 </ul>
                 <hr />
-                <h4>Total: ${totalPrice.toFixed(2)}</h4>
+                <h4>Total:</h4>
+                {hasDiscount ? (
+                    <>
+                        <p>Subtotal: ${totalPrice.toFixed(2)}</p>
+                        <p>Descuento por transferencia: {discountRate}%</p>
+                        <h4>Total con descuento: ${finalPrice.toFixed(2)}</h4>
+                    </>
+                ) : (
+                    <h4>${totalPrice.toFixed(2)}</h4>
+                )}
                 <Button onClick={handleCreateOrder} variant="success">Realizar pedido</Button>
             </Card>
         </div>

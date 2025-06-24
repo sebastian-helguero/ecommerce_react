@@ -7,13 +7,14 @@ import { changeUserRoleService } from "./AdministrateUser.services";
 
 const AdministrateUsers = () => {
     const [email, setEmail] = useState("");
+
     const { token } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const handleEmailChange = (e) => setEmail(e.target.value);
 
     const handleGoBack = () => navigate("/products");
-    const handleGoToModifyUserState = () => navigate("/users/modify-state");
 
     const handleModifyUserRole = async (e) => {
         e.preventDefault();
@@ -30,7 +31,6 @@ const AdministrateUsers = () => {
     return (
         <Container style={{ maxWidth: "500px", marginTop: "40px" }}>
             <h2>Declarar administrador</h2>
-
             <Form onSubmit={handleModifyUserRole}>
                 <Form.Group controlId="formEmail">
                     <Form.Label>Email del usuario</Form.Label>
@@ -46,14 +46,8 @@ const AdministrateUsers = () => {
                     <Button variant="secondary" onClick={handleGoBack}>
                         Volver a productos
                     </Button>
-
                     <Button variant="primary" type="submit">
                         Cambiar a rol "admin"
-                    </Button>
-                </div>
-                <div className="d-flex justify-content-end mt-3">
-                    <Button variant="warning" onClick={handleGoToModifyUserState}>
-                        Ir a Eliminar o Recuperar usuario
                     </Button>
                 </div>
             </Form>

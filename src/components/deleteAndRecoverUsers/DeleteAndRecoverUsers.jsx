@@ -8,10 +8,13 @@ import { deleteUserService, recoverUserService } from "./DeleteAndRecoverUsers.s
 
 const DeleteAndRecoverUsers = () => {
     const [email, setEmail] = useState("");
+
     const navigate = useNavigate();
+
     const { token } = useContext(AuthContext);
 
     const handleEmailChange = (e) => setEmail(e.target.value);
+    
     const handleGoBack = () => navigate("/products");
 
     const handleDeleteUser = async () => {

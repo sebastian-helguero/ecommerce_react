@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { ToastContainer } from "react-toastify"
-
 import Products from "./components/productsComps/products/Products"
 import NotFound from "./routes/notFound/NotFound";
 import ProductPage from "./components/productsComps/productPage/ProductPage";
@@ -19,6 +18,7 @@ import DeleteAndRecoverUsers from "./components/deleteAndRecoverUsers/DeleteAndR
 
 function App() {
   const { token } = useContext(AuthContext)
+
   return (
     <div >
       <ToastContainer />

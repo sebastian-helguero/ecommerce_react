@@ -58,7 +58,9 @@ const RecoverProduct = () => {
                 productCountry={product.productCountry}
                 productStock={product.productStock}
                 productState={product.productState}
-                onRecover={productRecover} />)
+                onRecover={productRecover} />
+        )
+
     return (
         <>
             <NavBar />

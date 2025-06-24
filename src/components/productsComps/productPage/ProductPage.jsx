@@ -6,7 +6,9 @@ import { CartContext } from "../../../services/cartContext/Cart.context";
 
 const ProductPage = () => {
     const location = useLocation();
+
     const navigate = useNavigate();
+    
     const { addToCart } = useContext(CartContext);
 
     const {

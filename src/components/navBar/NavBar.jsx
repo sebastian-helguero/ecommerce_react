@@ -5,10 +5,9 @@ import { useContext, useState } from 'react';
 import ToggleTheme from '../../ui/ToggleTheme';
 import { CartContext } from '../../services/cartContext/Cart.context';
 
-
 const NavBar = () => {
-
     const { handleUserLogout, token, userRole } = useContext(AuthContext);
+
     const { clearCart } = useContext(CartContext)
 
     const navigate = useNavigate();
@@ -34,11 +33,12 @@ const NavBar = () => {
     const handleGoAdministrateUsers = () => {
         navigate("/users")
     }
-
+    const handleGoToModifyUserState = () => {
+        navigate("/users/modify-state");
+    }
     return (
         <Navbar expand="lg" className="bg-body-tertiary sticky-top w-100 position-fixed" style={{ zIndex: "1000" }} data-bs-theme="dark">
             <Container fluid>
-                <Navbar.Brand >HOLA</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
@@ -53,7 +53,10 @@ const NavBar = () => {
                                 <NavDropdown.Item onClick={handleRecoverProduct}>Recuperar producto eliminado</NavDropdown.Item>
                             </NavDropdown>)}
                         {(userRole === "sysadmin" &&
-                            <Nav.Link onClick={handleGoAdministrateUsers}>Administrar Usuarios</Nav.Link>)}
+                            <NavDropdown title="Administrar Usuarios" id="navbarScrollingDropdown">
+                                <Nav.Link onClick={handleGoAdministrateUsers}>Dar admin a un usuario</Nav.Link>
+                                <Nav.Link onClick={handleGoToModifyUserState}>Eliminar o recuperar un usuario</Nav.Link>
+                            </NavDropdown>)}
                     </Nav>
                     {!token ?
                         <Nav>
