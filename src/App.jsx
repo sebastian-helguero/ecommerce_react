@@ -15,6 +15,7 @@ import Cart from "./components/cart/Cart";
 import CreateOrder from "./components/createOrder/CreateOrder";
 import AdministrateUsers from "./components/administrateUser/AdministrateUser";
 import DeleteAndRecoverUsers from "./components/deleteAndRecoverUsers/DeleteAndRecoverUsers";
+import Unauthorized from "./routes/unauthorized/Unauthorized";
 
 function App() {
   const { token } = useContext(AuthContext)
@@ -32,16 +33,21 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<Products />}></Route>
-          <Route element={<Protected />}>
-            <Route path="/cart" element={<Cart />}></Route>
-            <Route path="/create-order" element={<CreateOrder />}></Route>
-            <Route path="/users" element={<AdministrateUsers />}></Route>
-            <Route path="/users/modify-state" element={<DeleteAndRecoverUsers />}></Route>
-            <Route path="/recover-product" element={<RecoverProduct />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />}></Route>
+           <Route element={<Protected allowedRoles={["user", "admin", "sysadmin"]} />}>
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/create-order" element={<CreateOrder />} />
+            <Route path="/products/:id" element={<ProductPage />} />
+          </Route>
+          <Route element={<Protected allowedRoles={["admin", "sysadmin"]} />}>
             <Route path="/add-product" element={<NewProduct />} />
             <Route path="/edit-product/:id" element={<EditProduct />} />
-            <Route path="/products/:id" element={<ProductPage />} />
-            <Route path="*" element={<NotFound />}></Route>
+            <Route path="/recover-product" element={<RecoverProduct />} />
+          </Route>
+          <Route element={<Protected allowedRoles={["sysadmin"]} />}>
+            <Route path="/users" element={<AdministrateUsers />} />
+            <Route path="/users/modify-state" element={<DeleteAndRecoverUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>

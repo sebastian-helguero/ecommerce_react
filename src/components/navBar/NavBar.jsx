@@ -54,7 +54,7 @@ const NavBar = () => {
                             </NavDropdown>)}
                         {(userRole === "sysadmin" &&
                             <NavDropdown title="Administrar Usuarios" id="navbarScrollingDropdown">
-                                <Nav.Link onClick={handleGoAdministrateUsers}>Dar admin a un usuario</Nav.Link>
+                                <Nav.Link onClick={handleGoAdministrateUsers}>Control de Roles</Nav.Link>
                                 <Nav.Link onClick={handleGoToModifyUserState}>Eliminar o recuperar un usuario</Nav.Link>
                             </NavDropdown>)}
                     </Nav>

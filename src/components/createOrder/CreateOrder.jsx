@@ -41,7 +41,7 @@ const CreateOrder = () => {
     return (
         <div className="p-4">
             <Button variant="secondary" onClick={handleGoBack} className="mb-3">
-                ← Volver al carrito
+                Volver al carrito
             </Button>
             <Card className="p-4">
                 <h2>Confirmar pedido</h2>
