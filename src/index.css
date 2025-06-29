@@ -1,0 +1,12 @@
+.custom-badge {
+    border-radius: 12px;
+    padding: 0.4em 0.6em;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.filters-bar {
+  position: sticky;
+  top: 50px;
+  z-index: 100;
+}

@@ -33,9 +33,16 @@ const NavBar = () => {
     const handleGoAdministrateUsers = () => {
         navigate("/users")
     }
-    const handleGoToModifyUserState = () => {
-        navigate("/users/modify-state");
+    const handleUserOrders = () => {
+        navigate("/user/orders");
     }
+    const handleAllOrders = () => {
+        navigate("/orders")
+    }
+    const handleAdminRegisterUser = () => {
+        navigate("/admin/register")
+    }
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary sticky-top w-100 position-fixed" style={{ zIndex: "1000" }} data-bs-theme="dark">
             <Container fluid>
@@ -48,14 +55,17 @@ const NavBar = () => {
                         <Nav.Link onClick={handleProductList}>Productos</Nav.Link>
                         <Nav.Link onClick={handleGoCart}>Carrito</Nav.Link>
                         {((userRole === "admin" || userRole === "sysadmin") &&
-                            <NavDropdown title="Administrar Productos" id="navbarScrollingDropdown">
-                                <NavDropdown.Item onClick={handleAddProduct}>Agregar producto</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleRecoverProduct}>Recuperar producto eliminado</NavDropdown.Item>
-                            </NavDropdown>)}
+                            <>
+                                <Nav.Link onClick={handleAllOrders}>Administrar Ordenes</Nav.Link>
+                                <NavDropdown title="Administrar Productos" id="navbarScrollingDropdown">
+                                    <NavDropdown.Item onClick={handleAddProduct}>Agregar producto</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleRecoverProduct}>Recuperar producto eliminado</NavDropdown.Item>
+                                </NavDropdown>
+                            </>)}
                         {(userRole === "sysadmin" &&
                             <NavDropdown title="Administrar Usuarios" id="navbarScrollingDropdown">
-                                <Nav.Link onClick={handleGoAdministrateUsers}>Control de Roles</Nav.Link>
-                                <Nav.Link onClick={handleGoToModifyUserState}>Eliminar o recuperar un usuario</Nav.Link>
+                                <Nav.Link onClick={handleGoAdministrateUsers}>Administrar rol de usuario</Nav.Link>
+                                <Nav.Link onClick={handleAdminRegisterUser}>Crear cuenta a un usuario</Nav.Link>
                             </NavDropdown>)}
                     </Nav>
                     {!token ?
@@ -68,6 +78,7 @@ const NavBar = () => {
                             <NavDropdown title="opciones" id="navbarScrollingDropdown">
                                 <NavDropdown.Item >Tema: <ToggleTheme /></NavDropdown.Item>
                             </NavDropdown>
+                            <Nav.Link onClick={handleUserOrders}>Mis Pedidos</Nav.Link>
                             <Nav.Link onClick={() => {
                                 handleUserLogout();
                                 clearCart();
